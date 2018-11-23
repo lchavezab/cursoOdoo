@@ -33,6 +33,7 @@ class Course(models.Model):
             ]
 
     def copy(self, default=None):
+        print ("estoy pasando por la funcion heredada de copy en cursos")
         if default is None:
             default = {}
         copied_count = self.search_count([
@@ -42,10 +43,10 @@ class Course(models.Model):
         else:
             new_name =_("Copy of %s (%s)") % (self.name, copied_count)
         default['name'] = new_name
-        try:
-            return super(Course, self).copy(default)
-        except IntegrityError:
-            import pdb; pdb.set_trace()
+        #try:
+        return super(Course, self).copy(default)
+        #except IntegrityError:
+         #   import pdb; pdb.set_trace()
 
 
 class Session(models.Model):
