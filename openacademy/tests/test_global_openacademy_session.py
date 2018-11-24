@@ -24,8 +24,8 @@ class GlobalTestOpenAcademySession(TransactionCase):
         Check that raise of 'A session's instructor can't be an attendee'
         '''
         with self.assertRaisesRegexp(
-            ValidationError,
-            "A session's instructor can't be an attendee"):
+                ValidationError,
+                "A session's instructor can't be an attendee"):
             self.session.create({
                 'name': 'Session test 1',
                 'seats': 1,

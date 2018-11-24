@@ -73,7 +73,8 @@ class Session(models.Model):
     attendee_ids = fields.Many2many('res.partner', string="Attendees")
     taken_seats = fields.Float(compute='_taken_seats', store=True)
     active = fields.Boolean(default=True)
-    end_date = fields.Date(store=True, compute='_get_end_date',
+    end_date = fields.Date(
+        store=True, compute='_get_end_date',
         inverse='_set_end_date')
     attendees_count = fields.Integer(
         compute='_get_attendees_count', store=True)
@@ -99,7 +100,8 @@ class Session(models.Model):
     def _get_end_date(self):
         for record in self.filtered('start_date'):
             start_date = fields.Date.from_string(record.start_date)
-            record.end_date = (start_date
+            record.end_date = (
+                start_date
                 + timedelta(days=record.duration, seconds=-1))
 
     def _set_end_date(self):
