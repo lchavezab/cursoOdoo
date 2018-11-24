@@ -24,7 +24,8 @@ class GlobalTestOpenAcademyCourse(TransactionCase):
         self.course = self.env['openacademy.course']
 
     # Method of class that don't is test.
-    def create_course(self, course_name, course_description,
+    def create_course(
+        self, course_name, course_description,
         course_responsible_id):
         # create a course with parameters received
         course_id = self.course.create({
@@ -47,8 +48,7 @@ class GlobalTestOpenAcademyCourse(TransactionCase):
         with self.assertRaisesRegexp(
             IntegrityError,
             ' == new row for relation "openacademy_course" violates check'
-            ' constraint "openacademy_course_name_description_check" =='
-            ):
+            ' constraint "openacademy_course_name_description_check" =='):
             # Create a course with same name and description to raise error.
             self.create_course('test', 'test', None)
 
@@ -60,7 +60,7 @@ class GlobalTestOpenAcademyCourse(TransactionCase):
         '''
 
         new_id = self.create_course('test1', 'test_descripcion', None)
-        print ("new_id", new_id)
+        print("new_id", new_id)
 
         with self.assertRaisesRegexp(
                 IntegrityError,
@@ -68,7 +68,7 @@ class GlobalTestOpenAcademyCourse(TransactionCase):
                 ' constraint "openacademy_course_name_unique"'
                 ):
             new_id2 = self.create_course('test1', 'test_descripcion', None)
-            print ("new_id2", new_id2)
+            print("new_id2", new_id2)
 
     def test_15_duplicate_course(self):
         '''
@@ -76,4 +76,4 @@ class GlobalTestOpenAcademyCourse(TransactionCase):
         '''
         course = self.env.ref('openacademy.course0')
         course_id = course.copy()
-        print ("course_id", course_id)
+        print("course_id", course_id)

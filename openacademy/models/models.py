@@ -19,17 +19,18 @@ class Course(models.Model):
     responsible_id = fields.Many2one(
         'res.users', string="Responsible",
         index=True,  ondelete='set null',
-    # default=lambda self, *a: self.env.uid)
+        # default=lambda self, *a: self.env.uid)
         default=get_uid)
     session_ids = fields.One2many('openacademy.session', 'course_id')
 
     _sql_constraints = [
-        ('name_description_check',
+        (
+            'name_description_check',
             'CHECK(name != description)',
             "The title of the course should not be the descripcion"
         ),
-        ('name_unique',
-            'UNIQUE(name)',
+        (
+            'name_unique', 'UNIQUE(name)',
             "The course title must be unique",
         ),
         ]
@@ -57,11 +58,17 @@ class Session(models.Model):
     name = fields.Char(required=True)
     start_date = fields.Date(default=fields.Date.today)
     datetime_test = fields.Datetime(default=fields.Datetime.now)
-    duration = fields.Float(digits=(6,2), help="Duration in days")
+    duration = fields.Float(digits=(6, 2), help="Duration in days")
     seats = fields.Integer(string="Number of seats")
-    instructor_id = fields.Many2one('res.partner', string='Instructor', domain=['|', ('instructor', '=', True),
-        ('category_id.name', 'ilike', 'Teacher')])
-    course_id = fields.Many2one('openacademy.course', ondelete='cascade',
+    instructor_id = fields.Many2one(
+        'res.partner', string='Instructor',
+        domain=[
+            '|', ('instructor', '=', True),
+            ('category_id.name', 'ilike', 'Teacher')
+            ]
+        )
+    course_id = fields.Many2one(
+        'openacademy.course', ondelete='cascade',
         string="Course", required=True)
     attendee_ids = fields.Many2many('res.partner', string="Attendees")
     taken_seats = fields.Float(compute='_taken_seats', store=True)
@@ -92,7 +99,8 @@ class Session(models.Model):
     def _get_end_date(self):
         for record in self.filtered('start_date'):
             start_date = fields.Date.from_string(record.start_date)
-            record.end_date = start_date + timedelta(days=record.duration, seconds=-1)
+            record.end_date = (start_date
+                + timedelta(days=record.duration, seconds=-1))
 
     def _set_end_date(self):
         for record in self.filtered('start_date'):
