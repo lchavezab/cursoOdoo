@@ -13,8 +13,9 @@ class GlobalTestOpenAcademySession(TransactionCase):
     def setUp(self):
         super(GlobalTestOpenAcademySession, self).setUp()
         self.session = self.env['openacademy.session']
-        self.partner_vauxoo = self.env.ref('base.res_partner_address_16')
+        self.partner_vauxoo = self.env.ref('base.res_partner_3')
         self.course = self.env.ref('openacademy.course1')
+        self.partner_attendee = self.env.ref('base.res_partner_12')
 
     # Generic methods
 
@@ -23,9 +24,11 @@ class GlobalTestOpenAcademySession(TransactionCase):
         '''
         Check that raise of 'A session's instructor can't be an attendee'
         '''
+
         with self.assertRaisesRegexp(
-                ValidationError,
-                "A session's instructor can't be an attendee"):
+            ValidationError,
+            "A session's instructor can't be an attendee"
+        ):
             self.session.create({
                 'name': 'Session test 1',
                 'seats': 1,
